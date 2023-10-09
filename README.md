@@ -114,7 +114,7 @@ Routes are defined to handle various functionalities:
 
 ### Database - `kdy.db`
 
-![Database schema](https://lh3.googleusercontent.com/drive-viewer/AITFw-zdedwnfrmXBeL0h4xZvsAmsR7PR_O8rom_pSDjbxRIbW3tMRGxe7VKfQCHiQqGPEwCxrKQ2W9jemav7nObUrXfpqLGsQ=s1600)
+![Database schema](https://lh3.googleusercontent.com/drive-viewer/AK7aPaCaWXWQNe7JHOfIX_vY9X5RCHPfoFYz_1_c-aYy9upLIQe01QYs1gY_k42FWGCtM2cZCG2QPtOY9IulYwMCt9yOnSLzWQ=s1600)
 
 The kdy.db database comprises the following interconnected tables:
 
