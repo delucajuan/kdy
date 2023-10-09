@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  Users
+{% endblock %}
+
+{% block main %}
+  <div class="admin-users mx-auto my-4 text-center">
+    <h2 class="text-center mb-4">Users management</h2>
+    <form autocomplete="off" method="get" action="/admin/users" class="d-inline-flex w-100">
+      <div class="mb-3 ps-0 pe-1 flex-grow-1">
+        <input autofocus placeholder="Username" type="search" name="q" class="form-control" id="search-user" aria-describedby="search-username"{% if searchValue %} value={{searchValue}}{% endif %}>
+      </div>
+    </form>
+  </div>
+
+  {% if user %}
+    <div class="card text-center mx-auto mt-4" id="user-card">
+      <div class="card-header h5">{{ user.username }}</div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <h5 class="card-title">Personal info</h5>
+            <p>First name: {{ user.name }}</p>
+            <p>Last name: {{ user.last_name }}</p>
+          </li>
+          <li class="list-group-item">
+            <h5>Address</h5>
+            <p>{{ user.address }}</p>
+            <p>
+              <span>City: {{ user.city }} | ZIP: {{ user.zip }} | Planet: {{ user.planet }}</span>
+            </p>
+          </li>
+          <li class="list-group-item">
+            <h5>User type</h5>
+            <p>
+              {% if user.type == 'user' %}
+                Standard user
+              {% else %}
+                Admin user
+              {% endif %}
+            </p>
+          </li>
+
+          <li class="list-group-item">
+            <form method="post" action="/admin/users">
+                <input type="hidden" name="username" value="{{user.username}}">
+                <button type="button" class="btn btn-outline-danger mx-1 mt-1"  data-bs-toggle="modal" data-bs-target="#passwordModal">Change password</button>
+                {% if user.type == 'user' %}
+                <button type="submit" name="submit" value="user-admin" class="btn btn-outline-primary mt-1 mx-1">Set as admin user</button>
+                {% elif user.type == 'admin' %}
+                <button type="submit" name="submit" value="user-standard" class="btn btn-outline-primary mt-1 mx-1">Set as standard user</button>
+                {% endif %}
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="passwordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Change user password</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="password-change" method="post" action="/admin/users" novalidate>
+                <input type="hidden" name="username" value="{{user.username}}">
+                <input required autocomplete="off" class="form-control mb-1" name="new-password" type="password" placeholder="New password" aria-label="New password" id="new-password">
+                <div class="invalid-feedback">New password is invalid.</div>
+                <input required autocomplete="off" class="form-control" name="password-confirmation" type="password" placeholder="Re-enter new password" aria-label="New password" id="password-confirmation">
+                <div class="invalid-feedback">Passwords do not match.</div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" name="submit" value="password-change" form="password-change" class="btn btn-danger">Change password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}

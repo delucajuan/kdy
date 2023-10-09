@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  {{ vehicle.name }}
+{% endblock %}
+
+{% block main %}
+  <div class="card my-3 mx-auto justify-content-center" id="vehicle-detail">
+    <img src="../static/images/vehicles/{{ vehicle.id }}.webp" class="card-img-top" alt="{{ vehicle.name }}" />
+    <div class="card-body text-center">
+      <h4 class="card-title">{{ vehicle.name }}</h4>
+      <h5 class="fw-light">{{ vehicle.category }}</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <p class="card-text">
+            ₵ <span class="font-monospace">{{ '{:,}'.format(vehicle.price) }}</span>
+          </p>
+        </li>
+        <li class="list-group-item">
+          <h6>Length</h6>
+          <p class="card-text">{{ vehicle.length }} meters</p>
+        </li>
+        <li class="list-group-item">
+          <h6>Armament</h6>
+          <p class="card-text">{{ vehicle.armament }}</p>
+        </li>
+        <li class="list-group-item">
+          <h6>Role</h6>
+          <p class="card-text">{{ vehicle.role }}</p>
+        </li>
+        <li class="list-group-item">
+          <h6>Description</h6>
+          <p class="card-text">{{ vehicle.description }}</p>
+        </li>
+      </ul>
+      <form method="post" action="/add-to-cart?origin={{ request.full_path }}">
+        <button type="submit" class="btn btn-warning m-3" name="add-to-cart" value="{{ vehicle.id }}">Add to cart</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

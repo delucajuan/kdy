@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Checkout
+{% endblock %}
+
+{% block main %}
+<div class="checkout mx-auto mt-3">
+  <h3 class="text-center m-4">Checkout</h3>
+  <div class="card m-2 ">
+    <div class="card-body">
+      <h5 class="card-title">Shipping Address</h5>
+      <p class="card-text">{{shippingAddress.address}} | City: {{shippingAddress. city}} | ZIP: {{shippingAddress.zip}}
+        | Planet: {{shippingAddress.planet}}</p>
+      <p class="fw-light text-body-secondary">You can change this address in your <a class="text-decoration-none"
+          href="/profile#address" class="">profile</a></p>
+    </div>
+  </div>
+
+  <div class="card m-2">
+    <div class="card-body">
+      <h5 class="card-title my-1 mx-0">Order total: ₵<span class="font-monospace">{{ '{:,}'.format(orderTotal) }}</span></h5>
+    </div>
+  </div>
+
+  <div class="card mx-2" id="payment">
+    <div class="card-body">
+      <h5 class="card-title">Payment</h5>
+      <form class="mt-3 needs-validation" novalidate method="post" action="/checkout">
+
+        <div class="row g-2">
+          <div class="form-floating mb-3 col">
+            <input required id="cc-number" name="number" type="tel" inputmode="numeric" pattern="[0-9]{13,19}"
+              autocomplete="cc-number" class="form-control" maxlength="19" placeholder="Credit card number"
+              aria-label="Credit card">
+            <label for="cc-number">Credit Card Number</label>
+            <div class="invalid-feedback">Please insert a valid Credit Card number.</div>
+          </div>
+        </div>
+
+        <div class="row g-2">
+          <div class="form-floating mb-3 col-8">
+            <input required id="cc-exp" name="exp" type="tel" inputmode="numeric" pattern="^(0[1-9]|1[0-2])\/[0-9]{2}$" autocomplete="cc-number"
+              class="form-control" maxlength="5" placeholder="Credit card number" aria-label="Credit card number">
+            <label for="cc-exp">Expiration (MM/YY)</label>
+            <div class="invalid-feedback">Please insert a valid expiration date.</div>
+          </div>
+
+          <div class="form-floating mb-3 col-4">
+            <input required id="cc-csc" name="cvc" type="tel" inputmode="numeric" pattern="[0-9]{3,4}" autocomplete="cc-csc"
+              class="form-control" maxlength="4" placeholder="CVC" aria-label="CVC">
+            <label for="cc-csc">CVC</label>
+            <div class="invalid-feedback">Please insert a valid CVC.</div>
+          </div>
+        </div>
+
+        <div class="row g-2">
+          <div class="form-floating mb-3 col">
+            <input required id="cc-name" name="name" type="tel" inputmode="text" pattern="^(?! )[a-zA-Z ]{1,16}[a-zA-Z]$" autocomplete="cc-name" class="form-control" maxlength="16"
+              placeholder="Name in card" aria-label="Credit card name">
+            <label for="cc-name">Name in card</label>
+            <div class="invalid-feedback">Please insert name in card.</div>
+          </div>
+        </div>
+
+        <div class="row g-2 justify-content-center">
+          <button type="submit" class="btn btn-warning btn-lg mx-md-3 mt-3 cart-btn" id="checkout-btn" name="submit"
+            value="checkout">Place order</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  
+</div>
+{% endblock %}

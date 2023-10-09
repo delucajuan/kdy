@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap 5.3.0 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"></script>
+
+  <!-- Favicon -->
+  <link href="../static/favicon/favicon.ico" rel="icon" />
+
+  <!-- CSS -->
+  <link href="../static/styles.css" rel="stylesheet" />
+
+  <!-- Variables -->
+  {% if userType != "admin" %}
+  <script>
+    let itemsInCart = {{ cart.vehicles }};
+    const userType = 'user';
+  </script>
+  {% else %}
+  <script>
+    const userType = 'admin';
+  </script>
+  {% endif %}
+  
+  {% if request.path == "/admin" or request.path == "/history" %}
+  <script>
+    const orders = {{ orders|tojson }};
+  </script>
+  {% endif %}
+
+  <!-- JavaScript -->
+  <script src="../static/script.js"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+
+
+  <title>
+   Kuat Drive Yards |{% block title %}
+    {% endblock %}
+  </title>
+</head>
+<body class="bg-body-tertiary">
+  <nav class="navbar navbar-expand-{{ "sm" if userType == "admin" else "lg" }} bg-gradient bg-dark" data-bs-theme="dark">
+    <div class="container-xxl">
+      <a class="navbar-brand m-0{{ ' admin-brand' if userType == 'admin' }}" href="/">
+        <img src="../static/images/KDY-Logo.png" alt="KDY Logo" height="60" class="d-inline-block align-middle" />
+        <span>
+        Kuat Drive Yards
+        {% if  userType == "admin" %}<p class="fw-lighter fs-6">Admin user</p>{% endif %}
+        </span>
+      </a>
+
+      <!--Cart only form MD and smaller screens-->
+      {% if userType != "admin" %}
+      <div class="nav-item d-lg-none d-flex ms-auto me-2">
+        <a class="nav-link{% if request.path == '/cart' %} nav-cart-active{% else %} nav-cart{% endif %}" aria-label="go to cart" href="/cart">
+          <h5 class="cart-number" id="cart-number-md" aria-label="number of items in cart">{{ cart.vehicles }}</h5>
+        </a>
+      </div>
+      {% endif %}
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Only Admin users -->
+      {% if userType == "admin" %}
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link{% if request.path == '/admin' %} active" aria-current="page{% endif %}" href="/admin">Admin panel</a>
+          </li><li class="nav-item">
+            <a class="nav-link{% if request.path == '/admin/users' %} active" aria-current="page{% endif %}" href="/admin/users">Users</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link{% if request.path == '/profile' %} active" aria-current="page{% endif %}" href="/profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Log out</a>
+          </li>
+        </ul>
+      </div>
+
+      {% else %}
+      <div class="collapse navbar-collapse ms-2" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-0 align-items-lg-center">
+
+          {% if session['user_id'] %}
+          <li class="nav-item dropdown-center">
+            <a class="nav-link dropdown-toggle{% if request.path == "/profile" or request.path == "/history" %} active" aria-current="page{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">My account</a>
+            <ul class="dropdown-menu dropdown-menu-start">
+              <li>
+                <a class="dropdown-item{% if request.path == "/profile" %} active" aria-current="page{% endif %}" href="/profile">Profile</a>
+              </li>
+              <li>
+                <a class="dropdown-item{% if request.path == "/history" %} active" aria-current="page{% endif %}" href="/history">Order history</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="dropdown-item" href="/logout">Log out</a>
+              </li>
+            </ul>
+          </li>
+
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link{% if request.path == '/login' %} active" aria-current="page{% endif %}" href="/login">Log in</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link{% if request.path == '/register' %} active" aria-current="page{% endif %}" href="/register">Register</a>
+          </li>
+          {% endif %}
+        </ul>
+
+        <!--Search bar for LG and bigger screens-->
+        <form class="d-lg-flex d-none w-50" role="search" action="/vehicles">
+          <div class="input-group">
+            <input class="form-control vehicle-search" id="vehicle-search-lg" type="search" {% if search %}value="{{search}}"{% endif %} name="search" autocomplete="off" placeholder="Search"
+              aria-label="search vehicles" />
+            <button class="btn btn-outline-warning search-btn" type="submit">
+              <img id="search-icon-white" src="../static/images/search.png" alt="search icon" height="23" />
+              <img id="search-icon-black" src="../static/images/search2.png" alt="search icon" height="23" />
+            </button>
+          </div>
+        </form>
+
+        <ul class="navbar-nav ms-auto mb-0 align-items-lg-center">
+          <li class="nav-item dropdown-center">
+            <a class="nav-link dropdown-toggle{% if request.path == '/vehicles' %} active{% endif %}" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Vehicles</a>
+            <ul class="dropdown-menu dropdown-menu-start">
+
+              {% for category in categories %}
+              <li>
+                <a class="dropdown-item{% if request.url.rsplit('/', 1)[-1] == 'vehicles?category=' + category.id|string() %} active" aria-current="page{% endif %}" href="/vehicles?category={{category.id}}">{{category.name}}</a>
+              </li>
+              {% endfor %}
+
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="dropdown-item{% if request.url.rsplit('/', 1)[-1] == 'vehicles' %} active" aria-current="page{% endif %}" href="/vehicles">All Vehicles</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == "/about-us" %} active" aria-current="page{% endif %}" href="/about-us">About Us</a>
+          </li>
+
+          <!--Cart only for LG and bigger screens-->
+          <li class="nav-item d-lg-flex d-none">
+            <a class="nav-link{% if request.path == '/cart' %} nav-cart-active{% else %} nav-cart{% endif %}" aria-label="go to cart" href="/cart">
+              <h5 class="cart-number" id="cart-number-lg" aria-label="number of items in cart">{{ cart.vehicles }}</h5>
+            </a>
+          </li>
+        </ul>
+
+        <!--Search bar for MD and smaller screens-->
+        <form class="d-lg-none d-flex mt-2" role="search" action="/vehicles">
+          <input class="form-control me-2 vehicle-search" id="vehicle-search-md" type="search" {% if search %}value="{{search}}"{% endif %} name="search" autocomplete="off" placeholder="Search"
+            aria-label="search vehicles" />
+          <button class="btn btn-outline-warning search-btn" type="submit">
+            <img id="search-icon-white" src="../static/images/search.png" alt="search icon" height="23" />
+            <img id="search-icon-black" src="../static/images/search2.png" alt="search icon" height="23" />
+          </button>
+        </form>
+      </div>
+      {% endif %}
+
+    </div>
+
+  <div class="autocomplete-search autocomplete-items list-group text-start mt-1" id="autocomplete-lg">
+  </div>
+  <div class="autocomplete-search autocomplete-items list-group text-start mt-1" id="autocomplete-md">
+  </div>
+  </nav>
+  <main class="mx-1">
+
+    <!-- Flashed messages -->
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+      {% if errors %}
+        {% for error in errors %}
+          <div class="alert alert-danger alert-dismissible fade show justify-content-center mt-3 mx-auto" role="alert">
+            <strong>Error: </strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            {{ error }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}  
+    {% with w_messages = get_flashed_messages(category_filter=["warning"]) %}
+      {% if w_messages %}
+        {% for w_message in w_messages %}
+          <div class="alert alert-warning alert-dismissible fade show justify-content-center mt-3 mx-auto" role="alert">
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              {{ w_message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% with s_messages = get_flashed_messages(category_filter=["success"]) %}
+      {% if s_messages %}
+        {% for s_message in s_messages %}
+          <div class="alert alert-success alert-dismissible fade show justify-content-center mt-3 mx-auto" role="alert">
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              {{ s_message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block main %}
+    {% endblock %}
+
+  </main>
+  <footer class="mt-4 p-2 text-center text-muted">
+    <p>
+      Made by Juan De Luca for <a href="https://cs50.harvard.edu/x/2023" target="_blank" class="link-secondary">CS50X
+        2023</a> Final Project
+    </p>
+  </footer>
+</body>
+</html>

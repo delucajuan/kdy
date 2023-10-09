@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  Register
+{% endblock %}
+
+{% block main %}
+
+  <div class="container-lg my-4" id="register-container">
+    <h2>Register new user</h2>
+    <form class="row g-2 mt-4" id="register-form" action="/register" method="post" novalidate>
+      <div class="col-md-3">
+        <div class="form-floating mb-3 g-3">
+          <input type="text" class="form-control" id="register-first-name" placeholder="Name" value="{{ data.first_name }}" autocomplete="given-name" name="first_name"/>
+          <label for="register-first-name">First name</label>
+          <div class="invalid-feedback">Please provide your first name.</div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="form-floating mb-3 g-3">
+          <input type="text" class="form-control" id="register-last-name" placeholder="Last name" value="{{ data.last_name }}" autocomplete="family-name" name="last_name"/>
+          <label for="register-last-name">Last name</label>
+          <div class="invalid-feedback">Please provide your last name.</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating mb-3 g-3">
+          <input type="text" class="form-control" id="register-username" placeholder="Username" value="{{ data.username }}" autocomplete="username" name="username"/>
+          <label for="register-username">Username</label>
+          <div class="invalid-feedback"  id="invalid-username-feedback">Please choose a username.</div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <div class="form-floating mb-3 g-3">
+          <input type="password" class="form-control register-password" id="register-password" placeholder="Password" autocomplete="new-password" name="password"/>
+          <label for="register-password">Password</label>
+          <div class="invalid-feedback">Please choose a valid password.</div>
+          <div class="form-text">Your password needs to be between 8 and 30 characters long and contain one uppercase letter, one lowercase letter, and a number.</div>
+        
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <div class="form-floating mb-3 g-3">
+          <input type="password" class="form-control register-password invalid" id="register-password-conf" placeholder="Password" autocomplete="new-password"  name="password_conf"/>
+          <label for="register-password-conf">Re-enter password</label>
+          <div class="invalid-feedback" id="invalid-password-conf-feedback">Please re-enter password.</div>
+        </div>
+      </div>
+
+      <h4>Shipping address</h4>
+      <div class="col-md-6">
+        <div class="form-floating mb-3 g-3">
+          <input type="text" class="form-control" id="register-address" placeholder="Address" value="{{ data.address }}" autocomplete="street-address" name="address"/>
+          <label for="register-address">Address</label>
+          <div class="invalid-feedback">Please provide an address.</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating mb-3 g-3">
+          <input type="text" class="form-control" id="register-city" placeholder="City" value="{{ data.city }}" autocomplete="address-level2" name="city"/>
+          <label for="register-city">City</label>
+          <div class="invalid-feedback">Please provide a city.</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating mb-3 g-3">
+          <input type="text" class="form-control" id="register-zip" placeholder="Zip code" value="{{ data.zip }}" autocomplete="postal-code" name="zip"/>
+          <label for="register-zip">ZIP code</label>
+          <div class="invalid-feedback">Please provide a ZIP code.</div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-floating mb-3 g-3">
+          <select class="form-select" id="register-planet" placeholder="Planet" name="planet_id">
+            <option selected disabled>Select one</option>
+            {% for planet in planets %}
+            <option {% if data.planet_id and data.planet_id | int == planet.id %} selected {% endif %} value="{{planet.id}}">{{planet.name}}</option>
+            {% endfor %}
+          </select>
+          <label for="register-zip">Planet</label>
+          <div class="invalid-feedback">Please select a planet.</div>
+        </div>
+      </div>
+
+      <div class="col-md-10">
+        <div class="form-check mb-3 g-3">
+          <input class="form-check-input" type="checkbox" value="true" id="register-terms" name="terms"/>
+          <label class="form-check-label" for="register-terms">Agree to <a href="/about-us#terms-and-conditions" target="_blank">terms and conditions</a></label>
+          <div class="invalid-feedback">You must agree before submitting.</div>
+        </div>
+      </div>
+      <div class="col-md-10">
+        <button class="btn btn-lg btn-warning" type="submit">Register</button>
+        <p class="mt-3 m-1 fw-light">Already a user? <a href="/login" class="text-decoration-none">Log in</a> instead.</p>
+      </div>
+    </form>
+   
+  </div>
+{% endblock %}

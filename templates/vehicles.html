@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  Vehicles
+{% endblock %}
+
+{% block main %}
+{% if vehicles %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-4 p-2">
+      {% for vehicle in vehicles %}
+        <div class="col">
+          <div class="card">
+            <a href="/vehicles/?name={{vehicle.name}}"><img src="../static/images/vehicles/{{ vehicle.id }}.webp" class="card-img-top" alt="{{ vehicle.name }}" /></a>
+            <div class="card-body text-center">
+              <a class="vehicle-title" href="/vehicles/?name={{vehicle.name}}"><h5 class="card-title">{{vehicle.name}}</h5></a>
+              <p>₵ <span class="card-text font-monospace">{{ "{:,}".format(vehicle.price) }}<span></p>
+              <form method="post" action="/add-to-cart?origin={{request.full_path}}">
+                <button type="submit" class="btn btn-warning" name="add-to-cart" value="{{ vehicle.id }}">Add to cart</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+  </div>
+  {% else %}
+    <!-- No results -->
+    <div class="alert alert-warning mt-4" role="alert">
+      <h4>No results</h4>
+      <p class="m-0 mt-3">
+        Browse all our <a href="/vehicles" class="text-decoration-none">vehicles</a>.
+      </p>
+    </div>
+  {% endif %}
+{% endblock %}

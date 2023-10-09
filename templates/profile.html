@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  Profile
+{% endblock %}
+
+{% block main %}
+
+<div class="container my-4" id="profile-container">
+  <h2 class="text-center">Profile</h2>
+  <p class="text-center text-body-secondary fs-4 mt-0" id="pinfo-user">User: {{ data.username }}</p>
+  <section id="personal-info">
+    <form class="row g-2 mx-auto mb-4" id="pinfo-form" action="/profile" method="post" novalidate>
+      <h4>Personal info <button type="button" class="btn btn-outline-dark btn-sm ms-2" id="pinfo-change">Change</button></h4>
+      <fieldset disabled id="pinfo-fieldset">
+        <div class="input-group mb-3">
+          <div class="pe-sm-3 mb-3 col-12 col-sm-6">
+            <label for="first-name" class="form-label">First name</label>
+            <input type="text" name="first-name" id="first-name" class="form-control" value="{{ data.name }}" />
+            <div class="invalid-feedback">A first name is required.</div>
+          </div>
+          <div class="col-12 mb-3 col-sm-6">
+            <label for="last-name" class="form-label">Last name</label>
+            <input type="text" name="last-name" id="last-name" class="form-control" value="{{ data.last_name }}" />
+            <div class="invalid-feedback">A last name is required.</div>
+          </div>
+        </div>
+        <button type="submit" name="submit" value="pinfo" class="btn btn-warning d-none" id="save-pinfo">Save changes</button>
+      </fieldset>
+    </form>
+  </section>
+
+  <section id="password">
+    <form class="row g-2 mx-auto mb-4" id="password-form" action="/profile" method="post" novalidate>
+      <input type="text" name="username" autocomplete="username" value="{{ data.username }}" hidden>
+      <h4>Password <button type="button" class="btn btn-outline-dark btn-sm ms-2" id="password-change">Change</button></h4>
+      <fieldset disabled class="d-none" id="password-fieldset">
+        <div class="input-group mb-3">
+          <div class="pe-sm-3 mb-3 col-12 col-sm-4">
+            <input type="password" id="current-password" class="form-control" placeholder="Current password" autocomplete="current-password" name="current_password" />
+            <div class="invalid-feedback">Please provide your current password.</div>
+          </div>
+          <div class="pe-sm-3 mb-3 col-12 col-sm-4">
+            <input type="password" id="new-password" class="form-control" placeholder="New password" autocomplete="new-password"  name="new_password"/>
+            <div class="invalid-feedback">Please choose a valid password.</div>
+            <div class="form-text">Your password needs to be between 8 and 30 characters long and contain one uppercase letter, one lowercase letter, and a number.</div>
+          </div>
+          <div class="col-12 mb-3 col-sm-4">
+            <input type="password" id="password-conf" class="form-control" placeholder="Re-enter new password" autocomplete="new-password"  name="new_password_conf"/>
+            <div class="invalid-feedback" id="invalid-password-conf-feedback">Please re-enter password.</div>
+          </div>
+        </div>
+        <button type="submit" name="submit" value="password" class="btn btn-warning" id>Save changes</button>
+      </fieldset>
+    </form>
+  </section>
+
+  <section id="address">
+    <form class="row g-2 mx-auto mb-4" id="address-form" action="/profile" method="post" novalidate>
+      <h4>Shipping address <button type="button" class="btn btn-outline-dark btn-sm ms-2" id="address-change">Change</button></h4>
+      <fieldset disabled id="address-fieldset">
+        <div class="input-group mb-3">
+          <div class="pe-sm-3 mb-3 col-12 col-sm-8">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" id="address" value="{{ data.address }}" autocomplete="street-address" name="address"/>
+            <div class="invalid-feedback">Please provide an address.</div>
+          </div>
+          <div class="mb-3 col-12 col-sm-4">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" value="{{ data.city }}" autocomplete="address-level2" name="city"/>
+            <div class="invalid-feedback">Please provide a city.</div>
+          </div>
+          <div class="pe-sm-3 mb-3 col-12 col-sm-4">
+            <label for="zip" class="form-label">Zip code</label>
+            <input type="text" class="form-control" id="zip" value="{{ data.zip }}" autocomplete="postal-code" name="zip"/>
+            <div class="invalid-feedback">Please provide a ZIP code.</div>
+          </div>
+          <div class="mb-3 col-12 col-sm-4">
+            <label for="planet" class="form-label">Planet</label>
+            <select class="form-select" id="planet" placeholder="Planet" name="planet_id">
+              <option selected disabled>Select one</option>
+              {% for planet in planets %}
+              <option {% if data.planet_id and data.planet_id | int == planet.id %} selected {% endif %} value="{{planet.id}}">{{planet.name}}</option>
+              {% endfor %}
+            </select>
+            <div class="invalid-feedback">Please select a planet.</div>
+          </div>
+        </div>
+        <button type="submit" name="submit" value="address" class="btn btn-warning d-none" id="save-address">Save changes</button>
+      </fieldset>
+    </form>
+  </section>
+</div>
+
+{% endblock %}
+

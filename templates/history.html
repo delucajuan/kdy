@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block title%}
+Orders history
+{% endblock %}
+
+{% block main %}
+
+{% if orders %}
+<!-- If user has orders -->
+<h3 class="text-center my-3">Orders history</h3>
+<div class="user-orders p-1">
+
+  {% for order in orders %}
+  <div class="card mb-3 mx-auto order-card" style="max-width: 1500px;">
+    <div class="row g-0">
+      <div class="col-sm-3 overflow-auto order-images">
+
+        {% for detail in ordersDetails if detail.order_id == order.id %}
+        <img src="../static/images/vehicles/{{detail.vehicle_id}}.webp"
+          class="img-fluid rounded-start{% if not loop.first %} mt-1{% endif %}" alt="">
+        {% endfor %}
+
+      </div>
+      <div class="col-sm-9">
+        <div class="card-body order-data">
+          <h4 class="card-title mb-3">Order #{{order.id}}<small class="text-body-secondary fw-normal ms-3">{{
+              order.date_paid }}</small></h4>
+          <h5 class="card-text mb-3">Status: <span class={% if order.status=='pending' %}"text-warning"{% elif
+              order.status=='shipped' %}"text-primary"{% elif order.status=='delivered' %}"text-success"{% else
+              %}"text-danger"{% endif %}>{{order.status}}</h5>
+          <li class="list-group-item">
+            <div id="history-table-container" class="overflow-auto">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="fw-medium" scope="col">Quantity</th>
+                    <th class="fw-medium" scope="col">Vehicle</th>
+                    <th class="fw-medium" scope="col">Unit price</th>
+                    <th class="fw-medium" scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for detail in ordersDetails if detail.order_id == order.id%}
+                  <tr>
+                    <td>{{detail.quantity}}</td>
+                    <td>{{detail.vehicle}}</td>
+                    <td>₵<span class="font-monospace money">{{"{:,}".format(detail.unit_price)}}</span></td>
+                    <td>₵<span class="font-monospace money">{{"{:,}".format(detail.quantity *
+                        detail.unit_price)}}</span></td>
+                  </tr>
+                  {% endfor %}
+
+                  <tr>
+                    <td colspan="3" class="fw-normal">{% if order.shipping_method == 'express' %}Hyperspace Express
+                      Delivery{% else %}Galactic Cargo Service{% endif %}</td>
+                    <td>₵<span class="font-monospace money">{{"{:,}".format(order.shipping_cost)}}</span></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="3">Total</th>
+                    <th>₵<span class="font-monospace money">{{"{:,}".format(order.total)}}</span></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+{% else %}
+<!-- No orders -->
+<div class="alert alert-warning mt-4" role="alert">
+  <h4>No orders yet</h4>
+  <p class="m-0 mt-3">
+    Browse our <a href="/vehicles" class="text-decoration-none">vehicles</a>.
+  </p>
+</div>
+{% endif %}
+
+{% endblock %}

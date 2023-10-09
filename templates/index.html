@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title%}
+Home
+{% endblock %}
+
+{% block main %}
+<h4 class="text-center m-4">Discover the Legacy of Kuat Drive Yards:<br>
+    <small>From Capital Ships to Ground Assault Vehicles, Dominate the Battlefront!</small>
+</h4>
+
+<div class="card text-center m-auto mt-4 pt-0" id="carousel-card">
+    <div class="card-header bg-secondary-subtle" id="carousel-header">
+        <h4>These are our best-sellers</h4>
+    </div>
+    <div id="home-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#home-carousel" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#home-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#home-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#home-carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        </div>
+        <div class="carousel-inner">
+
+            {% for vehicle in vehicles %}
+            <div class="carousel-item {% if vehicle == vehicles[0] %} active {% endif %}">
+                <img src="../static/images/vehicles/{{ vehicle.id }}.webp" class="d-block w-100"
+                    alt="{{ vehicle.name }}">
+                <div class="carousel-caption d-block">
+                    <h5><a class="vehicle-title" href="/vehicles/?name={{ vehicle.name }}">{{ vehicle.name }}</a></h5>
+                    <p>₵ <span class="font-monospace">{{"{:,}".format(vehicle.price) }}</span></p>
+                    <form method="post" action="/add-to-cart?origin={{request.full_path}}">
+                        <button type="submit" id="add-cart-{{ vehicle.id }}"
+                            class="btn btn-outline-warning add-to-cart-btn" name="add-to-cart" value="{{ vehicle.id }}">
+                            <span>Add to cart</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#home-carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#home-carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+</div>
+{% endblock %}
+
+
+
+
