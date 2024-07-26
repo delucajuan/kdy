@@ -85,6 +85,7 @@ If you do not have Python installed, please refer to the [Python Installation Gu
 
    ```
    git clone https://github.com/delucajuan/kdy.git
+   cd kdy
    ```
 
 2. Create a virtual enviroment (optional but recomended):
