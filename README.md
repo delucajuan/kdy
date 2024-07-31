@@ -42,7 +42,7 @@
 
 ## Introduction
 
-This is the e-commerce website of Kuat Drive Yards, a fictional company from the Star Wars franchise that sells interplanetary vehicles, a web application built with Python using the Flask framework. It provides a platform for users to interact with vehicles, add them to their cart, and manage their profile information. The app also features user authentication, role-based access control, and a responsive user interface.
+This is the e-commerce website of Kuat Drive Yards, a fictional company from the Star Wars franchise that sells interplanetary vehicles. Built with Python and the Flask framework, I developed this site for my [CS50X](https://cs50.harvard.edu/x/2023) final project. It provides a platform for users to interact with vehicles, add them to their cart, and manage their profile information. The application includes user authentication, role-based access control, and a responsive user interface.
 
 ## Video Demo
 
